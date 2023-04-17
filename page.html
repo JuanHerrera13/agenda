@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Agenda de contatos</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link href="./boo.ico" rel="icon" type="image/x-icon" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Adicionar contato</h1>
+      <form id="agenda-form">
+        <label for="nome">Nome do contato:</label>
+        <input type="text" id="nome" name="nome" />
+        <label for="email">E-mail do contato:</label>
+        <input type="email" id="email" name="email" />
+        <label for="telefone">Telefone do contato:</label>
+        <input type="text" id="telefone" name="telefone" />
+        <input type="submit" value="Adicionar" />
+      </form>
+    </div>
+    <div id="contatos-adicionados">
+      <h2>Contatos</h2>
+      <div id="contatos"></div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+      let contatosAdicionados = [];
+      const agendaForm = document.getElementById("agenda-form");
+      const contatosDiv = document.getElementById("contatos");
+
+      agendaForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const nome = document.getElementById("nome").value;
+        const email = document.getElementById("email").value;
+        const telefone = document.getElementById("telefone").value;
+
+        const contato = {
+          nome: nome,
+          email: email,
+          telefone: telefone,
+        };
+
+        contatosAdicionados.push(contato);
+
+        document.getElementById("nome").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("telefone").value = "";
+
+        exibirContatos();
+      });
+
+      function exibirContatos() {
+        contatosDiv.innerHTML = "";
+
+        contatosAdicionados.forEach(function (contato, indice) {
+          const contatoDiv = document.createElement("div");
+          contatoDiv.classList.add("contato");
+          contatoDiv.innerHTML = contato.nome;
+
+          const dadosContatoDiv = document.createElement("div");
+          dadosContatoDiv.classList.add("dados-contato");
+          dadosContatoDiv.innerHTML = `
+      <p><strong>E-mail:</strong> ${contato.email}</p>
+      <p><strong>Telefone:</strong> ${contato.telefone}</p>`;
+
+          const mostrarDadosBtn = document.createElement("button");
+          mostrarDadosBtn.classList.add("mostrar-dados-btn");
+          mostrarDadosBtn.innerText = "Mostrar dados";
+          mostrarDadosBtn.addEventListener("click", function () {
+            dadosContatoDiv.style.display = "block";
+            mostrarDadosBtn.style.display = "none";
+            esconderDadosBtn.style.display = "inline-block";
+          });
+
+          const esconderDadosBtn = document.createElement("button");
+          esconderDadosBtn.classList.add("esconder-dados-btn");
+          esconderDadosBtn.innerText = "Esconder dados";
+          esconderDadosBtn.style.display = "none";
+          esconderDadosBtn.addEventListener("click", function () {
+            dadosContatoDiv.style.display = "none";
+            mostrarDadosBtn.style.display = "inline-block";
+            esconderDadosBtn.style.display = "none";
+          });
+
+          contatoDiv.appendChild(mostrarDadosBtn);
+          contatoDiv.appendChild(esconderDadosBtn);
+          contatoDiv.appendChild(dadosContatoDiv);
+          contatosDiv.appendChild(contatoDiv);
+        });
+      }
+    </script>
+  </body>
+</html>
